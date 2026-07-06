@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Accordion Block — Canon EDS
+   Design source: Canon-Components-2026 Figma
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Design tokens
+   -------------------------------------------------------------------------- */
+.accordion {
+  --accordion-font: 'Proxima Nova', arial, helvetica, sans-serif;
+  --accordion-text: #000000;
+  --accordion-bg: #ffffff;
+  --accordion-bg-expanded-header: #eff0f3;
+  --accordion-bg-table-row-alt: #f7f5f3;
+  --accordion-border: #d6dbe2;
+  --accordion-border-table: #e6e6e6;
+  --accordion-brand-red: #d92e3d;
+  --accordion-radius: 4px;
+  --accordion-item-height: 60px;
+  --accordion-padding-x: 20px;
+  --accordion-content-padding: 20px 20px 28px;
+  --accordion-title-size: 18px;
+  --accordion-title-lh: 26px;
+  --accordion-body-size: 14px;
+  --accordion-body-lh: 21px;
+  --accordion-chevron-size: 8px;
+  --accordion-chevron-thickness: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Block wrapper
+   -------------------------------------------------------------------------- */
+.accordion {
+  font-family: var(--accordion-font);
+  color: var(--accordion-text);
+}
+
+/* --------------------------------------------------------------------------
+   Expand All button  (.accordion.expand-all)
+   -------------------------------------------------------------------------- */
+.accordion.expand-all .accordion-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 32px;
+  margin-bottom: 16px;
+  background: var(--accordion-bg);
+  border: 1px solid var(--accordion-brand-red);
+  border-radius: var(--accordion-radius);
+  color: var(--accordion-brand-red);
+  font-family: var(--accordion-font);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.accordion.expand-all .accordion-expand-btn:hover {
+  background: var(--accordion-brand-red);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion item  (<details class="accordion-item">)
+   -------------------------------------------------------------------------- */
+details.accordion-item {
+  background: var(--accordion-bg);
+  border-top: 1px solid var(--accordion-border);
+  border-right: none;
+  border-bottom: 1px solid var(--accordion-border);
+  border-left: none;
+  border-radius: 0;
+  margin-bottom: -1px; /* collapse adjacent double-borders */
+}
+
+details.accordion-item[open] {
+  border: 1px solid var(--accordion-border);
+  border-radius: var(--accordion-radius);
+  margin-bottom: 0;
+  /* space between expanded item and next collapsed item */
+  margin-top: -1px;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion trigger  (<summary class="accordion-item-label">)
+   -------------------------------------------------------------------------- */
+details.accordion-item > summary.accordion-item-label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--accordion-padding-x);
+  min-height: var(--accordion-item-height);
+  background: var(--accordion-bg);
+  border-radius: 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--accordion-font);
+  font-weight: 400;
+  font-size: var(--accordion-title-size);
+  line-height: var(--accordion-title-lh);
+  color: var(--accordion-text);
+  transition: color 0.15s ease;
+}
+
+/* Remove default browser triangle */
+details.accordion-item > summary.accordion-item-label::-webkit-details-marker {
+  display: none;
+}
+
+details.accordion-item > summary.accordion-item-label::marker {
+  display: none;
+}
+
+/* Hover state — title turns red */
+details.accordion-item > summary.accordion-item-label:hover {
+  color: var(--accordion-brand-red);
+}
+
+/* Expanded state — header background changes */
+details.accordion-item[open] > summary.accordion-item-label {
+  background: var(--accordion-bg-expanded-header);
+  border-bottom: 1px solid var(--accordion-border);
+  border-radius: var(--accordion-radius) var(--accordion-radius) 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   Chevron icon (CSS-only — replace with mask-image once
+   /icons/chevron-down.svg is added to the project)
+   -------------------------------------------------------------------------- */
+details.accordion-item > summary.accordion-item-label::after {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--accordion-chevron-size);
+  height: var(--accordion-chevron-size);
+  border-right: var(--accordion-chevron-thickness) solid currentcolor;
+  border-bottom: var(--accordion-chevron-thickness) solid currentcolor;
+  transform: rotate(45deg); /* pointing down */
+  transition: transform 0.2s ease, border-color 0.15s ease;
+  margin-left: 12px;
+}
+
+details.accordion-item[open] > summary.accordion-item-label::after {
+  transform: rotate(-135deg); /* pointing up */
+}
+
+/* Chevron inherits red on hover via currentcolor */
+
+/* --------------------------------------------------------------------------
+   Panel body  (<div class="accordion-item-body">)
+   -------------------------------------------------------------------------- */
+.accordion-item-body {
+  padding: var(--accordion-content-padding);
+  font-family: var(--accordion-font);
+  font-weight: 400;
+  font-size: var(--accordion-body-size);
+  line-height: var(--accordion-body-lh);
+  color: var(--accordion-text);
+}
+
+.accordion-item-body p {
+  margin: 0 0 12px;
+}
+
+.accordion-item-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Light variation  (.accordion.light)
+   Panel headers use bold text on the gray background
+   -------------------------------------------------------------------------- */
+.accordion.light details.accordion-item > summary.accordion-item-label {
+  background: var(--accordion-bg-expanded-header);
+  font-weight: 700;
+}
+
+.accordion.light details.accordion-item[open] > summary.accordion-item-label {
+  background: var(--accordion-bg-expanded-header);
+}
+
+.accordion.light details.accordion-item[open] .accordion-item-body {
+  background: var(--accordion-bg);
+}
+
+/* --------------------------------------------------------------------------
+   Dark variation  (.accordion.dark)
+   TBD — visual spec not yet confirmed by Design
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   Mobile
+   -------------------------------------------------------------------------- */
+@media (width <= 767px) {
+  .accordion {
+    --accordion-item-height: 54px;
+    --accordion-content-padding: 16px 10px 28px;
+  }
+}
