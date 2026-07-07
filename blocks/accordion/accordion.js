@@ -33,21 +33,6 @@ async function fetchPlaceholders(prefix = 'default') {
   return window.placeholders[prefix];
 }
 
-// Handle Universal Editor panel selection — opens the selected panel
-export function handleSelection(event) {
-  const { detail } = event;
-  const resource = detail?.resource;
-  if (!resource) return;
-  const element = document.querySelector(`[data-aue-resource="${resource}"]`);
-  if (!element) return;
-  const block = element.parentElement?.closest('.block[data-aue-resource]')
-    || element?.closest('.block[data-aue-resource]');
-  block?.querySelectorAll('details.accordion-item').forEach((d) => {
-    d.open = false;
-  });
-  element.open = true;
-}
-
 export default async function decorate(block) {
   const isExpandAll = block.classList.contains('expand-all');
 
@@ -56,16 +41,12 @@ export default async function decorate(block) {
     const details = document.createElement('details');
     details.className = 'accordion-item';
 
-    // NOTE: In SSB Canon project, add moveInstrumentation(row, details) here
-    // to preserve AEM Universal Editor data-aue-* attributes.
-
     const summary = document.createElement('summary');
     summary.className = 'accordion-item-label';
 
     // col 1 → panel title (trigger)
     const titleCol = row.children?.[0];
     if (titleCol) {
-      // NOTE: In SSB Canon project, add moveInstrumentation(titleCol, summary) here.
       summary.append(...titleCol.childNodes);
     }
 
@@ -100,7 +81,4 @@ export default async function decorate(block) {
 
     block.prepend(btn);
   }
-
-  // Universal Editor event — open the panel being edited
-  block.addEventListener('aue:ui-select', handleSelection);
 }
