@@ -47,14 +47,15 @@ async function fetchPlaceholders(prefix = 'default') {
 }
 
 // Enforce single-panel-at-a-time (default variation).
-// Listens for the native <details> toggle event and closes all sibling panels.
+// Only operates on direct child panels — ignores toggle events that bubble
+// up from nested accordion fragments inside a panel body.
 function enforceExclusiveOpen(block) {
-  block.querySelectorAll('details.accordion-item').forEach((details) => {
-    details.addEventListener('toggle', () => {
+  const directPanels = [...block.children].filter((el) => el.matches('details.accordion-item'));
+  directPanels.forEach((details) => {
+    details.addEventListener('toggle', (event) => {
+      if (event.target !== details) return; // bubbled from a nested accordion — ignore
       if (details.open) {
-        block.querySelectorAll('details.accordion-item').forEach((other) => {
-          if (other !== details) other.open = false;
-        });
+        directPanels.forEach((other) => { if (other !== details) other.open = false; });
       }
     });
   });
