@@ -193,7 +193,7 @@ details.accordion-item[open] > summary.accordion-item-label::after {
 /* --------------------------------------------------------------------------
    Mobile
    -------------------------------------------------------------------------- */
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .accordion {
     --accordion-item-height: 54px;
     --accordion-content-padding: 16px 10px 28px;
