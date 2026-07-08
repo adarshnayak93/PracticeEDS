@@ -94,16 +94,21 @@ export default async function decorate(block) {
     row.replaceWith(details);
   });
 
-  // Load fragments: if a panel body contains only a path or link to a fragment,
-  // fetch and inject it so nested blocks (e.g. nested accordion) get decorated.
+  // Load fragments: detect a fragment path in the panel body.
+  // Works whether the body contains ONLY a path, or text + a path paragraph.
+  // The path element is removed and the fragment content is appended in its place.
   await Promise.all(
     [...block.querySelectorAll('.accordion-item-body')].map(async (body) => {
-      const link = body.querySelector('a');
-      const path = link ? link.getAttribute('href') : body.textContent.trim();
-      if (path && path.startsWith('/') && !path.startsWith('//')) {
-        const fragment = await loadFragment(path);
-        if (fragment) body.replaceChildren(...fragment.childNodes);
-      }
+      // Find a <p> or <a> whose text/href is a root-relative path (e.g. /fragments/foo)
+      const pathEl = [...body.querySelectorAll('p, a')].find((el) => {
+        const val = el.tagName === 'A' ? el.getAttribute('href') : el.textContent.trim();
+        return val && val.startsWith('/') && !val.startsWith('//');
+      });
+      if (!pathEl) return;
+      const path = pathEl.tagName === 'A' ? pathEl.getAttribute('href') : pathEl.textContent.trim();
+      pathEl.remove(); // remove the path element before injecting fragment
+      const fragment = await loadFragment(path);
+      if (fragment) body.append(...fragment.childNodes);
     }),
   );
 
