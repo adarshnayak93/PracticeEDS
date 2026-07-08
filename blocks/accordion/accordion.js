@@ -142,9 +142,11 @@ export default async function decorate(block) {
     btn.textContent = expandLabel;
 
     btn.addEventListener('click', () => {
-      const allPanels = [...block.querySelectorAll('details.accordion-item')];
-      const allOpen = allPanels.every((d) => d.open);
-      allPanels.forEach((d) => { d.open = !allOpen; });
+      // Use direct children only — same as enforceExclusiveOpen — to avoid
+      // controlling nested accordion panels loaded from fragments.
+      const directPanels = [...block.children].filter((el) => el.matches('details.accordion-item'));
+      const allOpen = directPanels.every((d) => d.open);
+      directPanels.forEach((d) => { d.open = !allOpen; });
       btn.textContent = allOpen ? expandLabel : collapseLabel;
     });
 
