@@ -123,7 +123,7 @@ export default async function decorate(block) {
 
   // Pre-open panels for open-panel-{number} / open-panel-all variation
   if (openPanelParam) {
-    const panels = [...block.querySelectorAll('details.accordion-item')];
+    const panels = [...block.children].filter((el) => el.matches('details.accordion-item'));
     if (openPanelParam === 'all') {
       panels.forEach((d) => { d.open = true; });
     } else {
