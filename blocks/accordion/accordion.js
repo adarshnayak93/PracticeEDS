@@ -19,7 +19,7 @@
 
 import { loadFragment } from '../fragment/fragment.js';
 
-// NOTE: In Canon SSB project, import from '../../scripts/aem.js' instead.
+// NOTE: In Canon project, import from '../../scripts/aem.js' instead.
 async function fetchPlaceholders(prefix = 'default') {
   window.placeholders = window.placeholders || {};
   if (!window.placeholders[prefix]) {
@@ -76,6 +76,7 @@ export default async function decorate(block) {
 
     const summary = document.createElement('summary');
     summary.className = 'accordion-item-label';
+    summary.setAttribute('aria-expanded', 'false');
 
     // col 1 → panel title (trigger)
     const titleCol = row.children?.[0];
@@ -91,6 +92,12 @@ export default async function decorate(block) {
 
     details.append(summary);
     if (bodyCol) details.append(bodyCol);
+
+    // Keep aria-expanded in sync with the native open/close state (WCAG AA)
+    details.addEventListener('toggle', () => {
+      summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+    });
+
     row.replaceWith(details);
   });
 
@@ -102,7 +109,9 @@ export default async function decorate(block) {
       // Find a <p> or <a> whose text/href is a root-relative path (e.g. /fragments/foo)
       const pathEl = [...body.querySelectorAll('p, a')].find((el) => {
         const val = el.tagName === 'A' ? el.getAttribute('href') : el.textContent.trim();
-        return val && val.startsWith('/') && !val.startsWith('//');
+        // Only treat as fragment if path is under /fragments/ to avoid
+        // accidentally matching regular in-body links or root paths.
+        return val && val.startsWith('/fragments/');
       });
       if (!pathEl) return;
       const path = pathEl.tagName === 'A' ? pathEl.getAttribute('href') : pathEl.textContent.trim();

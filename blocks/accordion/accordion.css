@@ -16,9 +16,11 @@
   --accordion-border-table: #e6e6e6;
   --accordion-brand-red: #d92e3d;
   --accordion-radius: 4px;
-  --accordion-item-height: 60px;
+
+  /* mobile-first base values */
+  --accordion-item-height: 54px;
   --accordion-padding-x: 20px;
-  --accordion-content-padding: 20px 20px 28px;
+  --accordion-content-padding: 16px 10px 28px;
   --accordion-title-size: 18px;
   --accordion-title-lh: 26px;
   --accordion-body-size: 14px;
@@ -64,7 +66,7 @@
 /* --------------------------------------------------------------------------
    Accordion item  (<details class="accordion-item">)
    -------------------------------------------------------------------------- */
-details.accordion-item {
+.accordion details.accordion-item {
   background: var(--accordion-bg);
   border-top: 1px solid var(--accordion-border);
   border-right: none;
@@ -74,7 +76,7 @@ details.accordion-item {
   margin-bottom: -1px; /* collapse adjacent double-borders */
 }
 
-details.accordion-item[open] {
+.accordion details.accordion-item[open] {
   border: 1px solid var(--accordion-border);
   border-radius: var(--accordion-radius);
   margin-bottom: 0;
@@ -151,7 +153,7 @@ details.accordion-item[open] > summary.accordion-item-label::after {
 /* --------------------------------------------------------------------------
    Panel body  (<div class="accordion-item-body">)
    -------------------------------------------------------------------------- */
-.accordion-item-body {
+.accordion .accordion-item-body {
   padding: var(--accordion-content-padding);
   font-family: var(--accordion-font);
   font-weight: 400;
@@ -160,11 +162,11 @@ details.accordion-item[open] > summary.accordion-item-label::after {
   color: var(--accordion-text);
 }
 
-.accordion-item-body p {
+.accordion .accordion-item-body p {
   margin: 0 0 12px;
 }
 
-.accordion-item-body p:last-child {
+.accordion .accordion-item-body p:last-child {
   margin-bottom: 0;
 }
 
@@ -191,11 +193,11 @@ details.accordion-item[open] > summary.accordion-item-label::after {
    -------------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------------
-   Mobile
+   Desktop — upgrade from mobile-first base
    -------------------------------------------------------------------------- */
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .accordion {
-    --accordion-item-height: 54px;
-    --accordion-content-padding: 16px 10px 28px;
+    --accordion-item-height: 60px;
+    --accordion-content-padding: 20px 20px 28px;
   }
 }
